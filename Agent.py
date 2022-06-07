@@ -232,9 +232,14 @@ class agent(nn.Module):
         # Actor loss
         td_advantage = r + self.discount_factor * self.critic(ns, npf) * (1-done) - value
         td_advantage = td_advantage.detach()
-        surr1 = ratio * td_advantage
-        surr2 = torch.clamp(ratio, 1-eps_clip, 1+eps_clip) * td_advantage
-        actor_loss = -torch.min(surr1, surr2).mean()
+        # surr1 = ratio * td_advantage
+        # surr2 = torch.clamp(ratio, 1-eps_clip, 1+eps_clip) * td_advantage
+        # actor_loss = -torch.min(surr1, surr2).mean()
+
+        # Actor loss 2
+        log_prob_ = log_prob_.view(1,-1)
+        actor_loss = -log_prob_ * td_advantage
+        actor_loss = actor_loss.mean()
 
         # Update
         self.loss = actor_loss + critic_loss

@@ -136,7 +136,7 @@ class DIRILearner:
                     alpha = self.agent.actor(torch.tensor(state1, device=device).float().view(1,self.K,-1),
                                              torch.tensor(portfolio, device=device).float().view(1,self.K+1,-1)).cpu().detach()[0]
                     a = action
-                    al = torch.cat([torch.tensor([0.5]), alpha], dim=-1).numpy()
+                    al = torch.cat([torch.tensor([1.0]), alpha], dim=-1).numpy()
                     p = self.agent.portfolio
                     pv = self.agent.portfolio_value
                     sv = self.agent.portfolio_value_static
@@ -146,7 +146,6 @@ class DIRILearner:
                     change = self.agent.change
                     pi_vector = self.agent.pi_operator(change)
                     profitloss = self.agent.profitloss
-                    loss = self.agent.loss
                     tex = self.agent.TRADING_TEX
                     charge = self.agent.TRADING_CHARGE
                     print(f"episode:{episode} ========================================================================")
@@ -167,7 +166,6 @@ class DIRILearner:
                     print(f"profitloss:{profitloss}")
                     print(f"tex:{tex}")
                     print(f"charge:{charge}")
-                    print(f"loss:{loss}")
 
                 #metrics 마지막 episode에 대해서만
                 if episode == range(num_episode)[-1]:
